@@ -22,3 +22,21 @@
 - name: install requests
   pip: name=requests state=present
   environment: proxy_env
+
+- name: install MySQL python module
+  yum: name=MySQL-python state=installed
+  when: ansible_distribution in ("CentOS", "RedHat")
+  environment: proxy_env
+
+- name: install MySQL python module (2.6 and 2.7)
+  yum: name={{item}} state=installed
+  when: ansible_distribution in ("Amazon")
+  with_items:
+    - MySQL-python26
+    - MySQL-python27
+  environment: proxy_env
+
+- name: install MySQL python module  on Debian derived OSes
+  apt: name=python-mysqldb state=installed
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+  environment: proxy_env
