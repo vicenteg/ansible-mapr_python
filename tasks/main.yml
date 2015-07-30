@@ -9,19 +9,20 @@
   when: ansible_distribution in ('CentOS','RedHat','Amazon')
   environment: proxy_env
 
-- name: install pip (Amazon Linux)
-  yum: name=python-pip state=present
+- name: install pip
+  command: easy_install pip
+  environment: proxy_env
+  when: ansible_distribution in ('CentOS', 'RedHat', 'Amazon')
+
+- name: install requests (Amazon)
+  yum: name=python-requests state=present
   environment: proxy_env
   when: ansible_distribution in ('Amazon')
 
-- name: install pip (RHEL, CentOS)
-  command: easy_install pip
-  environment: proxy_env
-  when: ansible_distribution in ('CentOS', 'RedHat')
-
-- name: install requests
+- name: install requests (pip)
   pip: name=requests state=present
   environment: proxy_env
+  when: ansible_distribution not in ('Amazon')
 
 - name: install MySQL python module
   yum: name=MySQL-python state=installed
