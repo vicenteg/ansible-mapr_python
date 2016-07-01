@@ -3,8 +3,8 @@
 
 - name: install libxml and dependencies for the xml module
   yum: name="{{item}}" state=present
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   with_items:
     - python-devel
     - python-setuptools
@@ -19,34 +19,34 @@
 
 - name: install pip
   command: easy_install /tmp/pip-7.1.2.tar.gz#md5=3823d2343d9f3aaab21cf9c917710196
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   when: ansible_distribution in ('CentOS', 'RedHat', 'Amazon')
 
 - name: install requests (Amazon)
   yum: name=python-requests state=present
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   environment: proxy_env
   when: ansible_distribution in ('Amazon')
 
 - name: install requests (pip)
   pip: name=/tmp/requests-2.8.0-py2.py3-none-any.whl state=present
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   when: ansible_distribution not in ('Amazon')
 
 - name: install MySQL python module
   yum: name=MySQL-python state=installed
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   when: ansible_distribution in ("CentOS", "RedHat")
   environment: proxy_env
 
 - name: install MySQL python module (2.6 and 2.7)
   yum: name={{item}} state=installed
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   when: ansible_distribution in ("Amazon")
   with_items:
     - MySQL-python26
@@ -55,7 +55,7 @@
 
 - name: install MySQL python module  on Debian derived OSes
   apt: name=python-mysqldb state=installed
-  sudo: yes
-  sudo_user: root
+  become: yes
+  become_user: root
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
   environment: proxy_env
