@@ -9,7 +9,6 @@
     - python-devel
     - python-setuptools
   when: ansible_distribution in ('CentOS','RedHat','Amazon')
-  environment: '{{proxy_env}}'
 
 - name: copy pip source tarball
   copy: src='pip-7.1.2.tar.gz#md5=3823d2343d9f3aaab21cf9c917710196' dest=/tmp mode=0644
@@ -27,7 +26,6 @@
   yum: name=python-requests state=present
   become: yes
   become_user: root
-  environment: '{{proxy_env}}'
   when: ansible_distribution in ('Amazon')
 
 - name: install requests (pip)
@@ -41,7 +39,6 @@
   become: yes
   become_user: root
   when: ansible_distribution in ("CentOS", "RedHat")
-  environment: '{{proxy_env}}'
 
 - name: install MySQL python module (2.6 and 2.7)
   yum: name={{item}} state=installed
@@ -51,11 +48,9 @@
   with_items:
     - MySQL-python26
     - MySQL-python27
-  environment: '{{proxy_env}}'
 
 - name: install MySQL python module  on Debian derived OSes
   apt: name=python-mysqldb state=installed
   become: yes
   become_user: root
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
-  environment: '{{proxy_env}}'
